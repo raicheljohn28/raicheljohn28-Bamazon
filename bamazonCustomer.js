@@ -29,7 +29,7 @@ function validateInput(value) {
         return true;
     }
     else {
-        return "Please enter a whole number"
+        return "Please enter a whole number."
     }
 }
 
@@ -42,7 +42,7 @@ function promptUser() {
         {
             type: "input",
             name: "item_id",
-            message: "Please enter an item you would like to purchase",
+            message: "Please enter an item you would like to purchase.",
             validate: validateInput,
             filter: Number
         },
@@ -50,7 +50,7 @@ function promptUser() {
         {
             type: "input",
             name: "quantity",
-            message: "Please enter the quantity of product you need",
+            message: "Please enter the quantity of product you need.",
             validate: validateInput,
             filter: Number
 
@@ -63,16 +63,19 @@ function promptUser() {
         var quantity = input.quantity;
 
         //Query for validation
-        var query = "SELECT * FROM products WHERE ?";
+        var qry = "SELECT * FROM products where ?";
 
-        connection.query(query, { item_id: item }, function (err, data) {
-            if (err) throw err;
+        connection.query(qry, {"item_id":item}, function (err, data) {
+            if (err) {
+                console.log(connection.query)
+                throw err;
+            }
 
             // If the user has selected an invalid item ID, data array will be empty
             // console.log('data = ' + JSON.stringify(data));
 
             if (data.length === 0) {
-                console.log('ERROR: Invalid Item ID. Please select a valid Item ID.');
+                console.log('ERROR: Invalid Item ID. Please select a valid Item ID. \n');
                 displayInventory();
             }
             else {
@@ -86,7 +89,7 @@ function promptUser() {
                     console.log("The product you requested is availble in stock!!");
 
                     //Update the query 
-                    var updateQuery = "UPDATE products SET stock_quantity = " + (productData.stock_quantity - quantity) + "WHERE item_id = " + item;
+                    var updateQuery = "UPDATE products SET stock_quantity = " + (productData.stock_quantity - quantity) + " WHERE item_id = " + item;
 
                     // console.log("Updated query" + updateQuery);
 
@@ -117,10 +120,10 @@ function promptUser() {
 function displayInventory() {
     // console.log("Display the inventory available");
 
-    query = "SELECT * FROM products";
+    var qry = "SELECT * FROM products";
 
     //Connection to the query
-    connection.query(query, function (err, data) {
+    connection.query(qry, function (err, data) {
         if (err) throw err;
 
         console.log('Existing Inventory: ');
